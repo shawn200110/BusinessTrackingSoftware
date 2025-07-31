@@ -1,12 +1,12 @@
 from dataclasses import dataclass
 
 @dataclass
-class Employee:
+class Vendor:
     name: str
+    part_num: str
+    unit_price: float
     address: str
     city: str
     state: str
-    zipcode: str
-    num_witholdings: float
-    salary: float
+    zipcode: int
     

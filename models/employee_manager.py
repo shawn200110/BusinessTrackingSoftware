@@ -21,7 +21,9 @@ class EmployeeManager:
         # Optionally: write a log or payroll history
 
     def save_employees(self):
-        data = [{"name": e.name, "salary": e.salary} for e in self.employees]
+        data = [{"name": e.name, "address": e.address, "city": e.city, 
+                 "state": e.state, "zipcode": e.zipcode, "num_witholdings": e.num_witholdings,
+                   "salary": e.salary} for e in self.employees]
         with open(self.data_file, "w") as f:
             json.dump(data, f, indent=2)
 

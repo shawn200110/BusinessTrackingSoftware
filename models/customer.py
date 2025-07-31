@@ -1,12 +1,11 @@
 from dataclasses import dataclass
 
 @dataclass
-class Employee:
-    name: str
+class Customer:
+    company_name: str
+    poc_name: str
     address: str
     city: str
     state: str
-    zipcode: str
-    num_witholdings: float
-    salary: float
+    zipcode: int
     
