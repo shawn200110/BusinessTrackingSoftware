@@ -8,12 +8,13 @@ class CashManager:
         self.transactions = []
         self.load()
 
-    def add_transaction(self, description, amount):
+    def add_transaction(self, description, amount, transaction_type):
         # amount: positive = cash in, negative = cash out
         self.balance += amount
         transaction = {
             "description": description,
             "amount": amount,
+            "type": transaction_type,
             "balance_after": self.balance,
             "timestamp": datetime.datetime.now().isoformat()
         }

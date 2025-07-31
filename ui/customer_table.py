@@ -8,8 +8,8 @@ class CustomerTableWidget(QWidget):
         self.setWindowTitle("Customers")
 
         self.table = QTableWidget()
-        self.table.setColumnCount(7)
-        self.table.setHorizontalHeaderLabels(["Name", "Address","City","State", "Zip Code", "Witholdings", "Salary"])
+        self.table.setColumnCount(6)
+        self.table.setHorizontalHeaderLabels(["Company Name", "Point-of-Contact", "Address","City","State", "Zip Code"])
         self.load_customers()
 
         add_button = QPushButton("Add Customer")
@@ -18,14 +18,19 @@ class CustomerTableWidget(QWidget):
         delete_button = QPushButton("Remove Selected")
         delete_button.clicked.connect(self.remove_selected_customer)
 
+        invoice_button = QPushButton("Create Invoice")
+        invoice_button.clicked.connect(self.create_invoice)
+
         buttons = QHBoxLayout()
         buttons.addWidget(add_button)
         buttons.addWidget(delete_button)
+        buttons.addWidget(invoice_button)
 
         layout = QVBoxLayout()
         layout.addLayout(buttons)
         layout.addWidget(self.table)
         self.setLayout(layout)
+
 
     def load_customers(self):
         self.table.setRowCount(0)
@@ -63,3 +68,11 @@ class CustomerTableWidget(QWidget):
                 name = name_item.text()
                 self.customer_manager.remove_customer(name)
                 self.load_customers()
+
+    def create_invoice(self):
+        selected = self.table.currentRow()
+        if selected >= 0:
+            name_item = self.table.item(selected, 0)
+            if name_item:
+                name = name_item.text()
+                self.customer_manager.create_invoice(name)

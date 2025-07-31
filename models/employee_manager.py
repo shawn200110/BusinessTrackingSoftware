@@ -20,11 +20,9 @@ class EmployeeManager:
         employee = [e for e in self.employees if e.name == name]
         employee = employee[0]
         self.cash_manager.add_transaction(description=f"Payroll - {employee.name}", 
-                                         amount=-employee.salary * (num_weeks / 52))
-                                        
-        # You can extend this to track payroll events, taxes, etc.
+                                         amount=-employee.salary * (num_weeks / 52),
+                                         transaction_type="payroll")
         print(f"{name} has been paid.")
-        # Optionally: write a log or payroll history
 
     def save_employees(self):
         data = [{"name": e.name, "address": e.address, "city": e.city, 

@@ -29,3 +29,21 @@ class CustomerManager:
                 self.customer = [Customer(**entry) for entry in data]
         except FileNotFoundError:
             self.customer = []
+
+    def create_invoice(self, company_name):
+        from ui.invoice_dialog import InvoiceDialog
+        from models.product_manager import Product, ProductManager
+        pm = ProductManager()
+        num_units = 500
+        product_names = [pm.products[i].name for i in range(len(pm.products))]
+        dialog = InvoiceDialog(product_names=product_names)
+        if dialog.exec():
+            product_name,quantity = dialog.get_invoice_data()
+        selected_product = pm.get_product_by_name(product_name)
+        unit_price = selected_product.unit_price
+        customer = [c for c in self.customer if c.company_name == company_name]
+        customer = customer[0]
+        self.cash_manager.add_transaction(description=f"Invoice - {customer.company_name},{product_name},{str(quantity)}", 
+                                         amount=num_units*unit_price,
+                                         transaction_type="invoice")
+        print(f"Invoice for {customer.company_name} has been created.")
