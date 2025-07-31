@@ -1,20 +1,13 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget
+# import os
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Business Manager")
+# project_root = os.path.abspath(os.path.dirname(__file__))
+# if project_root not in sys.path:
+#     sys.path.insert(0, project_root)
+    
+from PyQt6.QtWidgets import QApplication
+from ui.main_window import MainWindow
 
-        layout = QVBoxLayout()
-        layout.addWidget(QPushButton("View Balance Sheet"))
-        layout.addWidget(QPushButton("Add Employee"))
-        layout.addWidget(QPushButton("Create Invoice"))
-        layout.addWidget(QPushButton("Exit", clicked=self.close))
-
-        container = QWidget()
-        container.setLayout(layout)
-        self.setCentralWidget(container)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
