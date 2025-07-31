@@ -12,15 +12,18 @@ from ui.add_vendor_dialog import AddVendorDialog
 from ui.vendor_table import VendorTableWidget
 from models.vendor_manager import VendorManager
 from models.vendor import Vendor
+from models.cash_manager import CashManager
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setFixedSize(400, 200)
         self.setWindowTitle("Business Manager")
-
-        self.employee_manager = EmployeeManager()
-        self.customer_manager = CustomerManager()
-        self.vendor_manager = VendorManager()
+         
+        self.cash_manager = CashManager() 
+        self.employee_manager = EmployeeManager(cash_manager=self.cash_manager)
+        self.customer_manager = CustomerManager(cash_manager=self.cash_manager)
+        self.vendor_manager = VendorManager(cash_manager=self.cash_manager)
 
         layout = QVBoxLayout()
         open_employee_manager_btn = QPushButton("Employee Manager")
@@ -40,17 +43,20 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(container)
 
     def open_employee_manager(self):
-        manager = EmployeeManager()
+        # manager = EmployeeManager(cash_manager=self.cash_manager)
+        manager = self.employee_manager
         self.employee_window = EmployeeTableWidget(manager)
         self.employee_window.show()
 
     def open_customer_manager(self):
-        manager = CustomerManager()
-        self.employee_window = CustomerTableWidget(manager)
-        self.employee_window.show()
+        # manager = CustomerManager(cash_manager=self.cash_manager)
+        manager = self.customer_manager
+        self.customer_window = CustomerTableWidget(manager)
+        self.customer_window.show()
 
     def open_vendor_manager(self):
-        manager = VendorManager()
-        self.employee_window = VendorTableWidget(manager)
-        self.employee_window.show()
+        # manager = VendorManager(cash_manager=self.cash_manager)
+        manager = self.vendor_manager
+        self.vendor_window = VendorTableWidget(manager)
+        self.vendor_window.show()
         

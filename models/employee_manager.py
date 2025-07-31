@@ -2,8 +2,9 @@ import json
 from models.employee import Employee
 
 class EmployeeManager:
-    def __init__(self, data_file="employees.json"):
+    def __init__(self, cash_manager, data_file="employees.json"):
         self.data_file = data_file
+        self.cash_manager = cash_manager
         self.employees = []
         self.load_employees()
 
@@ -15,7 +16,12 @@ class EmployeeManager:
         self.employees = [e for e in self.employees if e.name != name]
         self.save_employees()
 
-    def pay_employee(self, name: str):
+    def pay_employee(self, name: str, num_weeks: int):
+        employee = [e for e in self.employees if e.name == name]
+        employee = employee[0]
+        self.cash_manager.add_transaction(description=f"Payroll - {employee.name}", 
+                                         amount=-employee.salary * (num_weeks / 52))
+                                        
         # You can extend this to track payroll events, taxes, etc.
         print(f"{name} has been paid.")
         # Optionally: write a log or payroll history

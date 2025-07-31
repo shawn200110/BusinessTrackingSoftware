@@ -2,7 +2,8 @@ import json
 from models.customer import Customer
 
 class CustomerManager:
-    def __init__(self, data_file="customer.json"):
+    def __init__(self, cash_manager, data_file="customer.json"):
+        self.cash_manager = cash_manager
         self.data_file = data_file
         self.customer = []
         self.load_customers()
@@ -14,7 +15,6 @@ class CustomerManager:
     def remove_customer(self, name: str):
         self.customer = [e for e in self.customer if e.company_name != name]
         self.save_customer()
-
 
     def save_customer(self):
         data = [{"company_name": e.company_name, "poc_name": e.poc_name, "address": e.address, "city": e.city, 

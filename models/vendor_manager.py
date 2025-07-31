@@ -2,7 +2,8 @@ import json
 from models.vendor import Vendor
 
 class VendorManager:
-    def __init__(self, data_file="vendor.json"):
+    def __init__(self, cash_manager, data_file="vendor.json"):
+        self.cash_manager = cash_manager
         self.data_file = data_file
         self.vendor = []
         self.load_vendor()
@@ -14,7 +15,6 @@ class VendorManager:
     def remove_vendor(self, name: str):
         self.vendor = [e for e in self.vendor if e.name != name]
         self.save_vendor()
-
 
     def save_vendor(self):
         data = [{"company name": e.name, "part_num": e.part_num, "unit_price": e.unit_price, "address": e.address, "city": e.city, 

@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QHBoxLayout, QInputDialog
 
 class EmployeeTableWidget(QWidget):
     def __init__(self, employee_manager):
@@ -18,9 +18,13 @@ class EmployeeTableWidget(QWidget):
         delete_button = QPushButton("Remove Selected")
         delete_button.clicked.connect(self.remove_selected_employee)
 
+        pay_button = QPushButton("Pay Employee")
+        pay_button.clicked.connect(self.pay_selected_employee)
+
         buttons = QHBoxLayout()
         buttons.addWidget(add_button)
         buttons.addWidget(delete_button)
+        buttons.addWidget(pay_button)
 
         layout = QVBoxLayout()
         layout.addLayout(buttons)
@@ -67,3 +71,16 @@ class EmployeeTableWidget(QWidget):
                 name = name_item.text()
                 self.employee_manager.remove_employee(name)
                 self.load_employees()
+
+    def pay_selected_employee(self):
+        selected = self.table.currentRow()
+        if selected >= 0:
+            name_item = self.table.item(selected, 0)
+            if name_item:
+                name = name_item.text()
+                num_weeks, ok = QInputDialog.getInt(
+                self, "Pay Employee", f"How many weeks of pay for {name}?", min=1, max=52)
+            
+            if ok:
+                self.employee_manager.pay_employee(name, num_weeks)
+            
