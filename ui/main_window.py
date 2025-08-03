@@ -18,13 +18,14 @@ from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from ui.inventory_table import InventoryTableWidget 
+from ui.add_expense_dialog import AddExpenseDialog
 
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setFixedSize(450, 200)
+        self.setFixedSize(450, 350)
         self.setWindowTitle("Business Manager")
          
         self.cash_manager = CashManager() 
@@ -113,6 +114,23 @@ class MainWindow(QMainWindow):
         view_inventory_btn.clicked.connect(self.view_inventory)
         layout.addWidget(view_inventory_btn)
 
+        # View Inventory
+        add_expense_btn = QPushButton("Add General Expense")
+        add_expense_btn.setStyleSheet("""
+                                QPushButton {
+                                    background-color: #FF6F61;
+                                    color: black;
+                                    font-size: 16px;
+                                    padding: 8px 16px;
+                                    border-radius: 6px;
+                                }
+                                QPushButton:hover {
+                                    background-color: #8B0000;
+                                }
+                            """)
+        add_expense_btn.clicked.connect(self.add_general_expense)
+        layout.addWidget(add_expense_btn)
+
         container = QWidget()
         container.setLayout(layout)
         self.setCentralWidget(container)
@@ -140,4 +158,15 @@ class MainWindow(QMainWindow):
         inventory_window.show()
         inventory_window.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)  # optional
         self.inventory_popup = inventory_window  # keep a reference so it doesn't close
+
+    def add_general_expense(self):
+        dialog = AddExpenseDialog()
+        if dialog.exec():
+            data = dialog.get_data()
+            self.cash_manager.add_transaction(
+                description=data["description"] or f"Expense - {data['category']}",
+                amount=-data["amount"],
+                transaction_type="expense",
+                expense_info=data
+            )
         

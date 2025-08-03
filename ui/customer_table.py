@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QHBoxLayout
+from ui.invoice_history_dialog import InvoiceHistoryDialog
 
 class CustomerTableWidget(QWidget):
     def __init__(self, customer_manager):
@@ -21,10 +22,14 @@ class CustomerTableWidget(QWidget):
         invoice_button = QPushButton("Create Invoice")
         invoice_button.clicked.connect(self.create_invoice)
 
+        view_invoice_history_btn = QPushButton("View Invoice History")
+        view_invoice_history_btn.clicked.connect(self.show_invoice_history)
+
         buttons = QHBoxLayout()
         buttons.addWidget(add_button)
         buttons.addWidget(delete_button)
         buttons.addWidget(invoice_button)
+        buttons.addWidget(view_invoice_history_btn)
 
         layout = QVBoxLayout()
         layout.addLayout(buttons)
@@ -76,3 +81,7 @@ class CustomerTableWidget(QWidget):
             if name_item:
                 name = name_item.text()
                 self.customer_manager.create_invoice(name)
+
+    def show_invoice_history(self):
+        dialog = InvoiceHistoryDialog()
+        dialog.exec()

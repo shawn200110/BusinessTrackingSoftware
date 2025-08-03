@@ -8,7 +8,7 @@ class CashManager:
         self.transactions = []
         self.load()
 
-    def add_transaction(self, description, amount, transaction_type, payroll_info=None):
+    def add_transaction(self, description, amount, transaction_type, payroll_info=None, expense_info=None):
         # amount: positive = cash in, negative = cash out
         self.balance += amount
         transaction = {
@@ -28,6 +28,13 @@ class CashManager:
                 "medicare_tax": payroll_info.get("medicare_tax"),
                 "net_paid": payroll_info.get("amount_paid")
             })
+        elif transaction_type == "expense":
+            transaction.update({
+                "amount": expense_info.get("amount"),
+                "category": expense_info.get("category"),
+                "description": expense_info.get("description")
+            })
+        
 
         self.transactions.append(transaction)
         self.save()

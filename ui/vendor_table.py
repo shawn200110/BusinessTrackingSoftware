@@ -1,5 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QHBoxLayout, QInputDialog
 from models.inventory_manager import InventoryManager
+from ui.purchases_history_dialog import PurchaseHistoryDialog
+
 
 class VendorTableWidget(QWidget):
     def __init__(self, vendor_manager):
@@ -22,10 +24,14 @@ class VendorTableWidget(QWidget):
         purchase_button = QPushButton("Purchase Inventory")
         purchase_button.clicked.connect(self.purchase_from_selected_vendor)
 
+        view_purchases_btn = QPushButton("View Purchase History")
+        view_purchases_btn.clicked.connect(self.show_purchase_history)
+
         buttons = QHBoxLayout()
         buttons.addWidget(add_button)
         buttons.addWidget(delete_button)
         buttons.addWidget(purchase_button)
+        buttons.addWidget(view_purchases_btn)
 
         layout = QVBoxLayout()
         layout.addLayout(buttons)
@@ -80,3 +86,7 @@ class VendorTableWidget(QWidget):
                 quantity,ok = QInputDialog.getInt(self, "Quantity", f"Quantity of Parts", min=0)
                 if ok:
                     self.vendor_manager.purchase_inventory(part_num,quantity)
+
+    def show_purchase_history(self):
+        dialog = PurchaseHistoryDialog()
+        dialog.exec()
