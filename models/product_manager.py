@@ -7,6 +7,7 @@ class Product:
         self.is_physical = is_physical
         self.bom = bom or []
 
+
 class ProductManager:
     def __init__(self, file="products.json"):
         self.file = file
@@ -26,6 +27,13 @@ class ProductManager:
             if product.name == name:
                 return product
         return None
+    
+    def calculate_bom_cost(self, product: Product, unit_prices: dict):
+        total = 0
+        for component, qty in product.bom:
+            price_per_unit = unit_prices.get(component, 0)
+            total += price_per_unit * qty
+        return total
 
 
 

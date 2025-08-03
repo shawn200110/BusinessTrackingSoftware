@@ -6,6 +6,7 @@ class AddVendorDialog(QDialog):
         self.setWindowTitle("Add Vendor")
 
         self.name_input = QLineEdit()
+        self.part_id_input = QLineEdit()
         self.part_num_input = QLineEdit()
         self.unit_price_input = QLineEdit()
         self.address_input = QLineEdit()
@@ -15,6 +16,7 @@ class AddVendorDialog(QDialog):
 
         layout = QFormLayout()
         layout.addRow("Vendor Name:", self.name_input)
+        layout.addRow("Part Identifier:", self.part_id_input)
         layout.addRow("Part Number:", self.part_num_input)
         layout.addRow("Unit Price", self.unit_price_input)
         layout.addRow("Address:", self.address_input)
@@ -29,6 +31,6 @@ class AddVendorDialog(QDialog):
         self.setLayout(layout)
 
     def get_vendor_data(self):
-        return (self.name_input.text(),self.part_num_input.text(), self.unit_price_input.text(),
-                 self.address_input.text(),self.city_input.text(),
+        return (self.name_input.text(),self.part_id_input.text(),self.part_num_input.text(),
+                 self.unit_price_input.text(),self.address_input.text(),self.city_input.text(),
                    self.state_input.text(), self.zipcode_input.text())

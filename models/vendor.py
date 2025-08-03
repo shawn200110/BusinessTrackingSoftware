@@ -2,7 +2,8 @@ from dataclasses import dataclass
 
 @dataclass
 class Vendor:
-    name: str
+    vendor_name: str
+    part_id: str
     part_num: str
     unit_price: float
     address: str

@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QHBoxLayout, QInputDialog
 
 class VendorTableWidget(QWidget):
     def __init__(self, vendor_manager):
@@ -8,8 +8,8 @@ class VendorTableWidget(QWidget):
         self.setWindowTitle("Vendors")
 
         self.table = QTableWidget()
-        self.table.setColumnCount(7)
-        self.table.setHorizontalHeaderLabels(["Name", "Address","City","State", "Zip Code", "Number of Witholdings", "Salary"])
+        self.table.setColumnCount(8)
+        self.table.setHorizontalHeaderLabels(["Vendor Name", "Part Identifier","Part Number","Unit Price","Address","City","State", "Zip Code"])
         self.load_vendors()
 
         add_button = QPushButton("Add Vendor")
@@ -18,9 +18,13 @@ class VendorTableWidget(QWidget):
         delete_button = QPushButton("Remove Selected")
         delete_button.clicked.connect(self.remove_selected_vendor)
 
+        purchase_button = QPushButton("Purchase Inventory")
+        purchase_button.clicked.connect(self.purchase_from_selected_vendor)
+
         buttons = QHBoxLayout()
         buttons.addWidget(add_button)
         buttons.addWidget(delete_button)
+        buttons.addWidget(purchase_button)
 
         layout = QVBoxLayout()
         layout.addLayout(buttons)
@@ -32,13 +36,14 @@ class VendorTableWidget(QWidget):
         for vendor in self.vendor_manager.vendor:
             row = self.table.rowCount()
             self.table.insertRow(row)
-            self.table.setItem(row, 0, QTableWidgetItem(vendor.name))
-            self.table.setItem(row, 1, QTableWidgetItem(vendor.part_num))
-            self.table.setItem(row, 2, QTableWidgetItem(vendor.unit_price))
-            self.table.setItem(row, 3, QTableWidgetItem(vendor.address))
-            self.table.setItem(row, 4, QTableWidgetItem(vendor.city))
-            self.table.setItem(row, 5, QTableWidgetItem(vendor.state))
-            self.table.setItem(row, 6, QTableWidgetItem(vendor.zipcode))
+            self.table.setItem(row, 0, QTableWidgetItem(vendor.vendor_name))
+            self.table.setItem(row, 1, QTableWidgetItem(vendor.part_id))
+            self.table.setItem(row, 2, QTableWidgetItem(vendor.part_num))
+            self.table.setItem(row, 3, QTableWidgetItem(vendor.unit_price))
+            self.table.setItem(row, 4, QTableWidgetItem(vendor.address))
+            self.table.setItem(row, 5, QTableWidgetItem(vendor.city))
+            self.table.setItem(row, 6, QTableWidgetItem(vendor.state))
+            self.table.setItem(row, 7, QTableWidgetItem(vendor.zipcode))
 
     def add_vendor_dialog(self):
         from ui.add_vendor_dialog import AddVendorDialog
@@ -46,9 +51,9 @@ class VendorTableWidget(QWidget):
 
         dialog = AddVendorDialog()
         if dialog.exec():
-            name,part_num,unit_price,address,city,state,zipcode = dialog.get_vendor_data()
+            vendor_name,part_id,part_num,unit_price,address,city,state,zipcode = dialog.get_vendor_data()
             try:
-                vendor = Vendor(name=name,part_num=part_num,unit_price=unit_price,
+                vendor = Vendor(vendor_name=vendor_name,part_id=part_id,part_num=part_num,unit_price=unit_price,
                                 address=address,city=city,
                                     state=state,zipcode=zipcode)
                 self.vendor_manager.add_vendor(vendor)
@@ -64,3 +69,13 @@ class VendorTableWidget(QWidget):
                 name = name_item.text()
                 self.vendor_manager.remove_vendor(name)
                 self.load_vendors()
+
+    def purchase_from_selected_vendor(self):
+        selected = self.table.currentRow()
+        if selected >= 0:
+            part_num = self.table.item(selected, 2)
+            if part_num:
+                part_num = int(part_num.text())
+                quantity,ok = QInputDialog.getInt(self, "Quantity", f"Quantity of Parts", min=0)
+                if ok:
+                    self.vendor_manager.purchase_inventory(part_num,quantity)

@@ -2,7 +2,7 @@ import json
 from models.customer import Customer
 
 class CustomerManager:
-    def __init__(self, cash_manager, data_file="customer.json"):
+    def __init__(self, cash_manager, inventory_manager, data_file="customer.json"):
         self.cash_manager = cash_manager
         self.data_file = data_file
         self.customer = []
@@ -30,11 +30,27 @@ class CustomerManager:
         except FileNotFoundError:
             self.customer = []
 
+    def process_sale(self, product_name: str, num_units: int, pm, im):
+        product = pm.get_product_by_name(product_name)
+        if not product:
+            print("Product not found!")
+            return
+
+        if not product.is_physical:
+            # no inventory change for digital goods
+            return
+
+        for component in product.bom:
+            part_name = component["name"]
+            required_qty = component["quantity"] * num_units
+            im.remove_quantity(part_name, required_qty)
+
     def create_invoice(self, company_name):
         from ui.invoice_dialog import InvoiceDialog
-        from models.product_manager import Product, ProductManager
+        from models.product_manager import ProductManager
+        from models.inventory_manager import InventoryManager
         pm = ProductManager()
-        num_units = 500
+        im = InventoryManager()
         product_names = [pm.products[i].name for i in range(len(pm.products))]
         dialog = InvoiceDialog(product_names=product_names)
         if dialog.exec():
@@ -43,7 +59,9 @@ class CustomerManager:
         unit_price = selected_product.unit_price
         customer = [c for c in self.customer if c.company_name == company_name]
         customer = customer[0]
-        self.cash_manager.add_transaction(description=f"Invoice - {customer.company_name},{product_name},{str(quantity)}", 
-                                         amount=num_units*unit_price,
+        im.verify_comfortable_quantities()
+        self.process_sale(product_name, quantity, pm, im)
+        self.cash_manager.add_transaction(description=f"Invoice - {customer.company_name},{product_name},{str(quantity)}cnt", 
+                                         amount=quantity*unit_price,
                                          transaction_type="invoice")
         print(f"Invoice for {customer.company_name} has been created.")
