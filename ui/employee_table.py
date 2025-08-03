@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QHBoxLayout, QInputDialog
+from ui.payroll_dialog import PayrollHistoryDialog
 
 class EmployeeTableWidget(QWidget):
     def __init__(self, employee_manager):
@@ -21,10 +22,14 @@ class EmployeeTableWidget(QWidget):
         pay_button = QPushButton("Pay Employee")
         pay_button.clicked.connect(self.pay_selected_employee)
 
+        view_payroll_button = QPushButton("View Payroll History")
+        view_payroll_button.clicked.connect(self.open_payroll_history)
+
         buttons = QHBoxLayout()
         buttons.addWidget(add_button)
         buttons.addWidget(delete_button)
         buttons.addWidget(pay_button)
+        buttons.addWidget(view_payroll_button)
 
         layout = QVBoxLayout()
         layout.addLayout(buttons)
@@ -87,4 +92,8 @@ class EmployeeTableWidget(QWidget):
             
             if ok:
                 self.employee_manager.pay_employee(name, num_weeks)
+
+    def open_payroll_history(self):
+        dialog = PayrollHistoryDialog()
+        dialog.exec()
             
