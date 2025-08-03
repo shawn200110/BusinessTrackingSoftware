@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QHBoxLayout, QInputDialog
+from models.inventory_manager import InventoryManager
 
 class VendorTableWidget(QWidget):
     def __init__(self, vendor_manager):

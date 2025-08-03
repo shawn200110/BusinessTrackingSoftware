@@ -9,7 +9,7 @@ class EmployeeTableWidget(QWidget):
 
         self.table = QTableWidget()
         self.table.setColumnCount(7)
-        self.table.setHorizontalHeaderLabels(["Name", "Address","City","State", "Zip Code", "Witholdings", "Salary"])
+        self.table.setHorizontalHeaderLabels(["Name", "Address","City","State", "Zip Code", "Witholdings", "Salary", "Dependents", "Status"])
         self.load_employees()
 
         add_button = QPushButton("Add Employee")
@@ -43,6 +43,8 @@ class EmployeeTableWidget(QWidget):
             self.table.setItem(row, 4, QTableWidgetItem(employee.zipcode))
             self.table.setItem(row, 5, QTableWidgetItem(f"{employee.num_witholdings:.2f}"))
             self.table.setItem(row, 6, QTableWidgetItem(f"{employee.salary:.2f}"))
+            self.table.setItem(row, 7, QTableWidgetItem(f"{employee.num_dependents}"))
+            self.table.setItem(row, 8, QTableWidgetItem(employee.filing_status))
 
     def add_employee_dialog(self):
         from ui.add_employee_dialog import AddEmployeeDialog
@@ -50,14 +52,16 @@ class EmployeeTableWidget(QWidget):
 
         dialog = AddEmployeeDialog()
         if dialog.exec():
-            name,address,city,state,zipcode,num_witholdings,salary = dialog.get_employee_data()
+            name,address,city,state,zipcode,num_witholdings,salary,num_dependents,filing_status = dialog.get_employee_data()
             try:
                 num_witholdings = float(num_witholdings)
                 salary = float(salary)
                 employee = Employee(name=name,address=address,
                                     city=city,salary=salary,
                                     state=state,zipcode=zipcode,
-                                    num_witholdings=num_witholdings)
+                                    num_witholdings=num_witholdings,
+                                    num_dependents=num_dependents,
+                                    filing_status=filing_status)
                 self.employee_manager.add_employee(employee)
                 self.load_employees()
             except ValueError:

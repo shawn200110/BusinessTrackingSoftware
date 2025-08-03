@@ -9,4 +9,6 @@ class Employee:
     zipcode: str
     num_witholdings: float
     salary: float
+    num_dependents: int
+    filing_status: str
     

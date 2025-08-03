@@ -17,6 +17,7 @@ from models.inventory_manager import InventoryManager
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
+from ui.inventory_table import InventoryTableWidget 
 
 
 
@@ -33,6 +34,7 @@ class MainWindow(QMainWindow):
                                                 inventory_manager=self.inventory_manager)
         self.vendor_manager = VendorManager(cash_manager=self.cash_manager,
                                             inventory_manager=self.inventory_manager)
+                                            
 
         layout = QVBoxLayout()
 
@@ -48,7 +50,7 @@ class MainWindow(QMainWindow):
         open_employee_manager_btn.setStyleSheet("""
                                 QPushButton {
                                     background-color: #0078D7;
-                                    color: white;
+                                    color: black;
                                     font-size: 16px;
                                     padding: 8px 16px;
                                     border-radius: 6px;
@@ -65,7 +67,7 @@ class MainWindow(QMainWindow):
         open_customer_manager_btn.setStyleSheet("""
                                 QPushButton {
                                     background-color: #B19CD9;
-                                    color: white;
+                                    color: black;
                                     font-size: 16px;
                                     padding: 8px 16px;
                                     border-radius: 6px;
@@ -82,7 +84,7 @@ class MainWindow(QMainWindow):
         open_vendor_manager_btn.setStyleSheet("""
                                 QPushButton {
                                     background-color: #A8D5BA;
-                                    color: white;
+                                    color: black;
                                     font-size: 16px;
                                     padding: 8px 16px;
                                     border-radius: 6px;
@@ -93,6 +95,23 @@ class MainWindow(QMainWindow):
                             """)
         open_vendor_manager_btn.clicked.connect(self.open_vendor_manager)
         layout.addWidget(open_vendor_manager_btn)
+
+        # View Inventory
+        view_inventory_btn = QPushButton("View Inventory")
+        view_inventory_btn.setStyleSheet("""
+                                QPushButton {
+                                    background-color: #FFF9C4;
+                                    color: black;
+                                    font-size: 16px;
+                                    padding: 8px 16px;
+                                    border-radius: 6px;
+                                }
+                                QPushButton:hover {
+                                    background-color: #FFD700;
+                                }
+                            """)
+        view_inventory_btn.clicked.connect(self.view_inventory)
+        layout.addWidget(view_inventory_btn)
 
         container = QWidget()
         container.setLayout(layout)
@@ -115,4 +134,10 @@ class MainWindow(QMainWindow):
         manager = self.vendor_manager
         self.vendor_window = VendorTableWidget(manager)
         self.vendor_window.show()
+
+    def view_inventory(self):
+        inventory_window = InventoryTableWidget(self.inventory_manager)
+        inventory_window.show()
+        inventory_window.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)  # optional
+        self.inventory_popup = inventory_window  # keep a reference so it doesn't close
         

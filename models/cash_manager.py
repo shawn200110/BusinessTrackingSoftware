@@ -8,7 +8,7 @@ class CashManager:
         self.transactions = []
         self.load()
 
-    def add_transaction(self, description, amount, transaction_type):
+    def add_transaction(self, description, amount, transaction_type, payroll_info=None):
         # amount: positive = cash in, negative = cash out
         self.balance += amount
         transaction = {
@@ -18,6 +18,17 @@ class CashManager:
             "balance_after": self.balance,
             "timestamp": datetime.datetime.now().isoformat()
         }
+
+        if transaction_type == "payroll":
+            transaction.update({
+                "gross_salary": payroll_info.get("salary"),
+                "federal_tax": payroll_info.get("federal_tax"),
+                "state_tax": payroll_info.get("state_tax"),
+                "social_security_tax": payroll_info.get("social_security_tax"),
+                "medicare_tax": payroll_info.get("medicare_tax"),
+                "net_paid": payroll_info.get("amount_paid")
+            })
+
         self.transactions.append(transaction)
         self.save()
 
