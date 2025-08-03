@@ -39,6 +39,9 @@ class CashManager:
         self.transactions.append(transaction)
         self.save()
 
+    def get_balance(self):
+        return self.balance
+
     def save(self):
         with open(self.file_name, "w") as f:
             json.dump({

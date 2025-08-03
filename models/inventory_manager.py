@@ -9,7 +9,9 @@ class Inventory:
     name: str
     part_num: int
     cautious_quantity: int
+    unit_price: float
     quantity: int = 0 
+    
 
 class InventoryManager:
     def __init__(self, data_file="inventory.json"):

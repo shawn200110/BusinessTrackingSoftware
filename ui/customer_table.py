@@ -22,7 +22,7 @@ class CustomerTableWidget(QWidget):
         invoice_button = QPushButton("Create Invoice")
         invoice_button.clicked.connect(self.create_invoice)
 
-        view_invoice_history_btn = QPushButton("View Invoice History")
+        view_invoice_history_btn = QPushButton("View Completed Sales History")
         view_invoice_history_btn.clicked.connect(self.show_invoice_history)
 
         buttons = QHBoxLayout()

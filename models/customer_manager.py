@@ -1,9 +1,11 @@
 import json
 from models.customer import Customer
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
 class CustomerManager:
-    def __init__(self, cash_manager, inventory_manager, data_file="customer.json"):
-        self.cash_manager = cash_manager
+    def __init__(self, cash_manager,receivables_manager,inventory_manager, data_file="customer.json"):
+        self.receivables_manager = receivables_manager
         self.data_file = data_file
         self.customer = []
         self.load_customers()
@@ -61,6 +63,17 @@ class CustomerManager:
         customer = customer[0]
         im.verify_comfortable_quantities()
         self.process_sale(product_name, quantity, pm, im)
+        due_date=date.today() + relativedelta(months=1)
+        self.receivables_manager.add_receivable(
+                                            customer=customer.company_name,
+                                            product=product_name,
+                                            quantity=quantity,
+                                            amount=selected_product.unit_price,
+                                            due_date=due_date
+                                        )
+
+
+
         self.cash_manager.add_transaction(description=f"Invoice - {customer.company_name},{product_name},{str(quantity)}cnt", 
                                          amount=quantity*unit_price,
                                          transaction_type="invoice")
