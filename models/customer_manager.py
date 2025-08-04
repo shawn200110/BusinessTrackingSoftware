@@ -72,9 +72,4 @@ class CustomerManager:
                                             due_date=due_date
                                         )
 
-
-
-        self.cash_manager.add_transaction(description=f"Invoice - {customer.company_name},{product_name},{str(quantity)}cnt", 
-                                         amount=quantity*unit_price,
-                                         transaction_type="invoice")
         print(f"Invoice for {customer.company_name} has been created.")

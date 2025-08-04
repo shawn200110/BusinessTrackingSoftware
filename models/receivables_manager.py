@@ -13,7 +13,7 @@ class ReceivablesManager:
             "customer": customer,
             "product": product,
             "quantity": quantity,
-            "amount": amount,
+            "amount": amount*quantity,
             "due_date": due_date.isoformat(),
             "paid": False,
             "timestamp": datetime.datetime.now().isoformat()

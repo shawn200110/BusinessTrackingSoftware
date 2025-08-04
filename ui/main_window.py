@@ -26,7 +26,7 @@ from ui.add_expense_dialog import AddExpenseDialog
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setFixedSize(450, 350)
+        self.setFixedSize(450, 450)
         self.setWindowTitle("Business Manager")
          
         self.cash_manager = CashManager() 
@@ -54,14 +54,14 @@ class MainWindow(QMainWindow):
         open_employee_manager_btn = QPushButton("Employee Manager")
         open_employee_manager_btn.setStyleSheet("""
                                 QPushButton {
-                                    background-color: #0078D7;
+                                    background-color: #d3d3d3;
                                     color: black;
                                     font-size: 16px;
                                     padding: 8px 16px;
                                     border-radius: 6px;
                                 }
                                 QPushButton:hover {
-                                    background-color: #005A9E;
+                                    background-color: #4f4f4f;
                                 }
                             """)
         open_employee_manager_btn.clicked.connect(self.open_employee_manager)

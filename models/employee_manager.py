@@ -59,7 +59,7 @@ class EmployeeManager:
         else:
             federal_rate = FEDERAL_TAX_BASE_RATE
 
-        dependent_credit = employee.num_dependents * 150  # flat $150 per dependent
+        dependent_credit = int(employee.num_dependents) * 150  # flat $150 per dependent
         federal_tax = max(0, gross * federal_rate - dependent_credit)
 
         state_tax = gross * STATE_TAX
